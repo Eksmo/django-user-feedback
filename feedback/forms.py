@@ -5,4 +5,4 @@ from feedback.models import Feedback
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        exclude = ("user", "url", "resolved", "publish",)
+        exclude = ('user', 'resolved', 'url', 'headers', 'ip_address')

@@ -4,3 +4,7 @@ User: {% if feedback.user %}{{ feedback.user.get_full_name }} ({{ feedback.user.
 
 Feedback:
 {{ feedback.feedback }}
+
+Headers:
+{{ feedback.headers }}
+

@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.template import Template, RequestContext
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
+from django.test.utils import override_settings
 
 from feedback.models import Feedback
 
@@ -19,6 +20,7 @@ class FeedbackTests(TestCase):
         )
         self.data = {
             "feedback": "Your site is great.",
+            "email": "user@example.com",
         }
         self.c = Client()
         self.feedback_url = reverse('django-user-feedback')
@@ -33,12 +35,17 @@ class FeedbackTests(TestCase):
         self.assertNotEqual(feedback1.id, feedback2.id)
         self.assertEqual(self.user.id, feedback2.user.id)
 
+    @override_settings(TEMPLATE_CONTEXT_PROCESSORS=tuple(settings.TEMPLATE_CONTEXT_PROCESSORS) + ('feedback.context_processors.feedback_form',))
     def test_context_processor(self):
-        OLD_TEMPLATE_CONTEXT_PROCESSORS = settings.TEMPLATE_CONTEXT_PROCESSORS
-        settings.TEMPLATE_CONTEXT_PROCESSORS = tuple(settings.TEMPLATE_CONTEXT_PROCESSORS) + ('feedback.context_processors.feedback_form',)
+
+        from django.template import loader, context
+        context._standard_context_processors = None
+
         request = self.factory.get(self.feedback_url)
         c = RequestContext(request)
         self.assertTrue(c.has_key('feedback_form'))
         response = self.c.post(self.feedback_url, {})
         self.assertEqual(1, len(response.context['feedback_form'].errors))
-        settings.TEMPLATE_CONTEXT_PROCESSORS = OLD_TEMPLATE_CONTEXT_PROCESSORS
+
+        context._standard_context_processors = None
+

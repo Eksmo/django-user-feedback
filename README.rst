@@ -51,10 +51,26 @@ There are a few optional settings available:
     Default: False. If set to True, an email will be sent each time a user
     provides feedback.
 
-``FEEDBACK_EMAIL_TO``
+``FEEDBACK_TO_EMAIL``
 
-    Default: ``settings.DEFAULT_FROM_EMAIL``. The email address to which
+    Default: None. The email addresses to which
     feedback emails should be sent.
+
+``FEEDBACK_HEADER_FILTER``
+
+    Default: see feedback.views for details. The http headers that will be
+    stored in the headers field.
+
+``FEEDBACK_FLASH_MESSAGE``
+
+    Default: False. If True and django.messages installed it adds a
+    flash message to the user.
+
+``FEEDBACK_SUCCESS_URL``
+
+    Default: /. The default URL to which to send the user for successful
+    feedback.
+
 
 There are also two additional templates ``feedback/email/body.txt`` and
 ``feedback/email/subject.txt`` which control the output formatting for the

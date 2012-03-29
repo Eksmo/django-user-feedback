@@ -1,1 +1,1 @@
-Feedback from {{ feedback.user }}
+Feedback from {% if feedback.user %}{{ feedback.user }}{% else %}anonymous user{% endif %}
