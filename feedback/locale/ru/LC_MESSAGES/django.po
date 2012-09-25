@@ -21,15 +21,15 @@ msgstr ""
 
 #: models.py:8
 msgid "Bug"
-msgstr ""
+msgstr "Ошибка"
 
 #: models.py:9
 msgid "Feature"
-msgstr ""
+msgstr "Предложение"
 
 #: models.py:10
 msgid "Support request"
-msgstr ""
+msgstr "Нужна помощь"
 
 #: models.py:23
 msgid "IP address"
@@ -46,4 +46,4 @@ msgstr ""
 
 #: views.py:73
 msgid "Your feedback has been sent. Thank you!"
-msgstr ""
+msgstr "Мы получили ваше послание, спасибо!"

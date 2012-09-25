@@ -1,13 +1,16 @@
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
-from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponse
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView
 
 from feedback.forms import FeedbackForm
 from feedback.models import Feedback
+
+import json
 
 
 class FeedbackView(CreateView):
@@ -82,12 +85,24 @@ class FeedbackView(CreateView):
         if getattr(settings, 'FEEDBACK_FLASH_MESSAGE', False) and \
             'django.contrib.messages' in settings.INSTALLED_APPS:
             messages.success(self.request, _('Your feedback has been sent. Thank you!'))
+        if self.request.is_ajax():
+            return HttpResponse(
+                json.dumps({'redirect': self.get_success_url()}), 
+                mimetype="application/json",
+            )
+
         return response
 
     def form_invalid(self, form):
         # Update our context to avoid being overwritten by context processors
         context = RequestContext(self.request, self.get_context_data())
         context['feedback_form'] = form
+        if self.request.is_ajax():
+            return HttpResponse(
+                json.dumps({'errors': form.errors}), 
+                mimetype="application/json",
+                status=400
+            )
         return self.render_to_response(context)
 
     def get_success_url(self):
